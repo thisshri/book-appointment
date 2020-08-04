@@ -7,7 +7,12 @@ import {
 
 import './styles.scss';
 
-import { Container, Button } from 'react-bootstrap';
+import {
+  Container,
+  Button,
+  Row,
+  Col,
+} from 'react-bootstrap';
 
 const Appointment = () => { 
   let { date, month, year } = useParams();
@@ -17,16 +22,37 @@ const Appointment = () => {
 
   return (
     <Container className="AppointmentWrapper">
-      { timeSlot.map(
-          time => (
-            <Link to={`${time}/details/`}>
-              <Button>
-                { time } to { ++time }
-              </Button>
-            </Link>
-          )
-        )
-      }
+      <Row>
+        <Col>
+          <h1 className="">
+            {
+             "DATE: ------------------ [   <   ]    [   >   ] " 
+            }
+
+          </h1>
+        </Col>
+      </Row>
+      <Row>
+        <Col className="my-5">
+          <h1>
+            Select A Time Slot
+          </h1>
+        </Col>
+      </Row>
+      <Row>
+        <Col className="my-5">
+          { timeSlot.map(
+              time => (
+                <Link to={`${time}/details/`}>
+                  <Button>
+                    { time } to { ++time }
+                  </Button>
+                </Link>
+              )
+            )
+          }
+        </Col>
+      </Row>
     </Container>
   );
  }
