@@ -1,8 +1,11 @@
-import React from 'react';
+import React, { useMemo } from 'react';
+
+import moment from 'moment';
 
 import {
   useParams,
   Link,
+  Redirect,
 } from 'react-router-dom';
 
 import './styles.scss';
@@ -14,21 +17,38 @@ import {
   Col,
 } from 'react-bootstrap';
 
+const TIME_SLOT = [9, 10, 11, 12, 13, 14, 15, 16];
+
 const Appointment = () => { 
   let { date, month, year } = useParams();
-  console.log(date, month, year)
+  const currentDate = `${date}/${month}/${year}`;
 
-  const timeSlot = [9, 10, 11, 12, 13, 14, 15, 16, 17]
+  const bookingData = useMemo(
+    () => (
+      JSON.parse(
+        localStorage.getItem('Data')
+        ) || {}
+    ), []
+  );
 
+  if (!(date && month && year)) {
+    const currentDate = moment();
+    date = currentDate.date();
+    month = currentDate.month() + 1;
+    year = currentDate.year();
+    return (
+      <Redirect to={`/${date}/${month}/${year}/`} />
+    )
+  }
+  
   return (
     <Container className="AppointmentWrapper">
       <Row>
         <Col>
-          <h1 className="">
+          <h1>
             {
-             "DATE: ------------------ [   <   ]    [   >   ] " 
+             `${currentDate}: ------------ [   <   ]    [   >   ] ` 
             }
-
           </h1>
         </Col>
       </Row>
@@ -41,10 +61,10 @@ const Appointment = () => {
       </Row>
       <Row>
         <Col className="my-5">
-          { timeSlot.map(
+          { TIME_SLOT.map(
               time => (
                 <Link to={`${time}/details/`}>
-                  <Button>
+                  <Button className={bookingData[currentDate] && bookingData[currentDate][time] && "booked"}>
                     { time } to { ++time }
                   </Button>
                 </Link>
