@@ -25,12 +25,12 @@ const AppointmentDetails = () => {
   const currentDate = `${date}/${month}/${year}`;
   const history = useHistory();
 
-  const Data = JSON.parse(
+  const DATA = JSON.parse(
       localStorage.getItem('Data')
-    );
+    ) || {};
 
   const [userDetails, setUserDetails] = useState(
-    Data && Data[currentDate] && Data[currentDate][timeFrom] || {}
+    DATA[currentDate] && DATA[currentDate][timeFrom] || {}
   );
 
   const updateFormData = (e) => {
@@ -43,21 +43,15 @@ const AppointmentDetails = () => {
   } 
    
   const onClickSave = () => { 
-    let Data = JSON.parse(
-      localStorage.getItem('Data')
-    ) || {};
-
-    if (!Data[currentDate]) {
-      Data = {
-        [currentDate]: {
-          [timeFrom]: userDetails,
-        }
-      } 
+    if (!DATA[currentDate]) {
+      DATA[currentDate] = {
+        [timeFrom]: userDetails,
+      }
     } else {
-      Data[currentDate][timeFrom] = userDetails;
+      DATA[currentDate][timeFrom] = userDetails;
     }
       
-    localStorage.setItem( 'Data', JSON.stringify(Data));
+    localStorage.setItem( 'Data', JSON.stringify(DATA))
         
     history.goBack();
   }
