@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 
 import {
   useParams,
@@ -16,12 +16,50 @@ import {
   FormControl,
 } from 'react-bootstrap';
 
+const FIRST_NAME = "firstName";
+const LAST_NAME = "lastName";
+const MOBILE_NUMBER = "mobile";
+
 const AppointmentDetails = () => { 
-  let { timeFrom } = useParams();
+  let { date, month, year, timeFrom} = useParams();
+  const currentDate = `${date}/${month}/${year}`;
   const history = useHistory();
 
+  const Data = JSON.parse(
+      localStorage.getItem('Data')
+    );
+
+  const [userDetails, setUserDetails] = useState(
+    Data && Data[currentDate] && Data[currentDate][timeFrom] || {}
+  );
+
+  const updateFormData = (e) => {
+    setUserDetails(
+      {
+        ...userDetails,
+        [e.target.dataset.type]: e.target.value,
+      }
+    )
+  } 
+   
   const onClickSave = () => { 
-    history.push('/2/8/2020/')
+    let Data = JSON.parse(
+      localStorage.getItem('Data')
+    ) || {};
+
+    if (!Data[currentDate]) {
+      Data = {
+        [currentDate]: {
+          [timeFrom]: userDetails,
+        }
+      } 
+    } else {
+      Data[currentDate][timeFrom] = userDetails;
+    }
+      
+    localStorage.setItem( 'Data', JSON.stringify(Data));
+        
+    history.goBack();
   }
 
   return (
@@ -43,6 +81,9 @@ const AppointmentDetails = () => {
               placeholder="First Name"
               aria-label="First Name"
               aria-describedby="First Name"
+              data-type={FIRST_NAME}
+              onChange={updateFormData}
+              value={userDetails[FIRST_NAME]}
             />
           </InputGroup>
           <InputGroup className="mb-3">
@@ -50,6 +91,9 @@ const AppointmentDetails = () => {
               placeholder="Last Name"
               aria-label="Last Name"
               aria-describedby="Last Name"
+              data-type={LAST_NAME}
+              onChange={updateFormData}
+              value={userDetails[LAST_NAME]}
             />
           </InputGroup>
           <InputGroup className="mb-3">
@@ -57,13 +101,18 @@ const AppointmentDetails = () => {
               placeholder="Mobile Number"
               aria-label="First Name"
               aria-describedby="First Name"
+              data-type={MOBILE_NUMBER}
+              onChange={updateFormData}
+              value={userDetails[MOBILE_NUMBER]}
             />
           </InputGroup>
         </Col>
       </Row>
       <Row className="buttons">
         <Col>
-          <Button variant="secondary">
+          <Button
+            onClick={() => history.goBack()}
+            variant="secondary">
             Cancel
           </Button>
         </Col>
