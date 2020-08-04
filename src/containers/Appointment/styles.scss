@@ -3,5 +3,10 @@
     margin: 10px;
     width: 100%;
     padding: 20px;
+
+    &.booked {
+      background-color: red;
+      border: red;
+    }
   }
 }
