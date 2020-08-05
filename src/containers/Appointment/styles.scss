@@ -1,12 +1,35 @@
 .AppointmentWrapper {
+  .navWrapper {
+    background: #396afc;  /* fallback for old browsers */
+    background: -webkit-linear-gradient(to right, #2948ff, #396afc);  /* Chrome 10-25, Safari 5.1-6 */
+    background: linear-gradient(to right, #2948ff, #396afc); /* W3C, IE 10+/ Edge, Firefox 16+, Chrome 26+, Opera 12+, Safari 7+ */
+
+    .nav{
+      display: flex;
+      align-items: baseline;
+      justify-content: space-between;
+
+      .button {
+        padding: 10px;
+        font-size: 3rem;
+        cursor: pointer;
+      }
+
+      h2 {
+        color: white;
+      }
+    }
+  }
+
   button {
     margin: 10px;
-    width: 100%;
+    width: fill-available;
+    width: -webkit-fill-available;
     padding: 20px;
 
     &.booked {
       background-color: red;
-      border: red;
+      border-color: red;
     }
   }
 }
