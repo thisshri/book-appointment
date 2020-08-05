@@ -32,7 +32,7 @@ const AppointmentDetails = ({
   const currentDate = `${date}/${month}/${year}`;
   const history = useHistory();
   const DATA = useMemo(
-    () => appointments && appointments[currentDate] || {},
+    () => (appointments && appointments[currentDate]) || {},
     [appointments, currentDate]
   );
   const [userDetails, setUserDetails] = useState(

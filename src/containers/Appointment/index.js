@@ -31,7 +31,7 @@ const Appointment = ({
   const currentDate = `${date}/${month}/${year}`;
 
   const bookingData = useMemo(
-    () => (appointments && appointments[currentDate] || {}),
+    () => ((appointments && appointments[currentDate]) || {}),
     [appointments, currentDate]
   );
 
