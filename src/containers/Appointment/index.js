@@ -40,6 +40,18 @@ const Appointment = () => {
       <Redirect to={`/${date}/${month}/${year}/`} />
     )
   }
+
+  const formatTime = (time) => {
+    if (time < 12) {
+      return `${time} AM`
+    }
+
+    if (time > 12) {
+      time = time - 12;
+    }
+  
+    return `${time} PM`
+  }
   
   return (
     <Container className="AppointmentWrapper">
@@ -65,7 +77,7 @@ const Appointment = () => {
               time => (
                 <Link to={`${time}/details/`}>
                   <Button className={bookingData[currentDate] && bookingData[currentDate][time] && "booked"}>
-                    { time } to { ++time }
+                    { formatTime(time) } to { formatTime(++time) }
                   </Button>
                 </Link>
               )
