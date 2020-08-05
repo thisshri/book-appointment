@@ -1,9 +1,12 @@
-import React, { useState } from 'react';
+import React, { useState, useMemo } from 'react';
+import { connect } from 'react-redux';
 
 import {
   useParams,
   useHistory,
 } from 'react-router-dom';
+
+import { updateAppointment } from 'actions.js';
 
 import './styles.scss';
 
@@ -21,17 +24,19 @@ const FIRST_NAME = "firstName";
 const LAST_NAME = "lastName";
 const MOBILE_NUMBER = "mobile";
 
-const AppointmentDetails = () => { 
+const AppointmentDetails = ({
+  appointments,
+  updateAppointment,
+}) => { 
   let { date, month, year, timeFrom} = useParams();
   const currentDate = `${date}/${month}/${year}`;
   const history = useHistory();
-
-  const DATA = JSON.parse(
-      localStorage.getItem('Data')
-    ) || {};
-
+  const DATA = useMemo(
+    () => appointments && appointments[currentDate] || {},
+    [appointments, currentDate]
+  );
   const [userDetails, setUserDetails] = useState(
-    DATA[currentDate] && DATA[currentDate][timeFrom] || {}
+    DATA[timeFrom] || {}
   );
 
   const updateFormData = (e) => {
@@ -40,7 +45,7 @@ const AppointmentDetails = () => {
         ...userDetails,
         [e.target.dataset.type]: e.target.value,
       }
-    )
+    );
   } 
    
   const onClickSave = () => {
@@ -69,15 +74,7 @@ const AppointmentDetails = () => {
       return
     }
 
-    if (!DATA[currentDate]) {
-      DATA[currentDate] = {
-        [timeFrom]: userDetails,
-      }
-    } else {
-      DATA[currentDate][timeFrom] = userDetails;
-    }
-      
-    localStorage.setItem( 'Data', JSON.stringify(DATA))
+    updateAppointment(currentDate, timeFrom, obj);
         
     history.goBack();
   }
@@ -157,4 +154,11 @@ const AppointmentDetails = () => {
   );
  }
 
-export default AppointmentDetails;
+export default connect(
+  ({appointments}) => ({
+    appointments,
+  }),
+  {
+    updateAppointment,
+  }
+)(AppointmentDetails);

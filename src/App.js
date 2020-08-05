@@ -3,6 +3,7 @@ import './App.css';
 
 import Appointment from 'containers/Appointment';
 import AppointmentDetails from 'containers/AppointmentDetails';
+import { Provider } from 'react-redux';
 
 import {
   HashRouter as Router,
@@ -10,14 +11,17 @@ import {
   Route,
 } from 'react-router-dom';
 
+import store from './store.js';
 
 function App() {
   return (
     <Router>
-      <Switch>
-        <Route path="/:date/:month/:year/:timeFrom/details" component={AppointmentDetails}/>
-        <Route path="/:date?/:month?/:year?/" component={Appointment}/>
-      </Switch>
+      <Provider store={store}>
+        <Switch>
+          <Route path="/:date/:month/:year/:timeFrom/details" component={AppointmentDetails}/>
+          <Route path="/:date?/:month?/:year?/" component={Appointment}/>
+        </Switch>
+      </Provider>
     </Router>
   );
 }

@@ -1,5 +1,5 @@
 import React, { useMemo, useCallback } from 'react';
-
+import { connect } from 'react-redux';
 import moment from 'moment';
 
 import {
@@ -20,20 +20,19 @@ import {
 
 const TIME_SLOT = [9, 10, 11, 12, 13, 14, 15, 16];
 
-const Appointment = () => { 
+const Appointment = ({
+  appointments,
+}) => { 
   let { date, month, year } = useParams();
   const history = useHistory();
   const currentDate = `${date}/${month}/${year}`;
 
   const bookingData = useMemo(
-    () => (
-      JSON.parse(
-        localStorage.getItem('Data')
-        ) || {}
-    ), []
+    () => (appointments && appointments[currentDate] || {}),
+    [appointments, currentDate]
   );
 
-   const gotoDate = useCallback(
+  const gotoDate = useCallback(
     (day) => (
       moment(`${date}/${month}/${year}`, "D/M/YYYY").add(day, "days").format('D-M-YYYY').split('-')
     ), [date, month, year]
@@ -44,7 +43,7 @@ const Appointment = () => {
       history.push(
         `/${parseInt(newDate[0])}/${parseInt(newDate[1])}/${parseInt(newDate[2])}/`
       )
-    ), []
+    ), [history]
   )
 
   const formatTime = useCallback(
@@ -75,9 +74,9 @@ const Appointment = () => {
     <div className="AppointmentWrapper">
       <div className="navWrapper">
         <Container className="nav">
-          <div onClick={() => changeDate(gotoDate(-1))} className="button">⬅️</div>
+          <div onClick={() => changeDate(gotoDate(-1))} className="button"><span role="img">⬅</span>️</div>
           <h2>{currentDate}</h2>
-          <div onClick={() => changeDate(gotoDate(1))} className="button">➡️</div>
+          <div onClick={() => changeDate(gotoDate(1))} className="button"><span role="img">➡</span></div>
         </Container>
       </div>
     <Container>
@@ -92,8 +91,8 @@ const Appointment = () => {
         <Col>
           { TIME_SLOT.map(
               time => (
-                <Link to={`${time}/details/`}>
-                  <Button className={bookingData[currentDate] && bookingData[currentDate][time] && "booked"}>
+                <Link key={time} to={`${time}/details/`}>
+                  <Button className={bookingData[time] && "booked"}>
                     { formatTime(time) } to { formatTime(++time) }
                   </Button>
                 </Link>
@@ -107,4 +106,8 @@ const Appointment = () => {
   );
  }
 
-export default Appointment;
+export default connect(
+  ({appointments}) => ({
+    appointments,
+  })
+)(Appointment);
