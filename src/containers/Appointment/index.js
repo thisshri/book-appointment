@@ -18,6 +18,9 @@ import {
   Col,
 } from 'react-bootstrap';
 
+import LeftArrow from 'static/icons/left.png';
+import RightArrow from 'static/icons/right.png';
+
 const TIME_SLOT = [9, 10, 11, 12, 13, 14, 15, 16];
 
 const Appointment = ({
@@ -74,9 +77,9 @@ const Appointment = ({
     <div className="AppointmentWrapper">
       <div className="navWrapper">
         <Container className="nav">
-          <div onClick={() => changeDate(gotoDate(-1))} className="button"><span role="img">⬅</span>️</div>
+          <div onClick={() => changeDate(gotoDate(-1))} className="button"><img alt="left button" src={LeftArrow}/>️</div>
           <h2>{currentDate}</h2>
-          <div onClick={() => changeDate(gotoDate(1))} className="button"><span role="img">➡</span></div>
+          <div onClick={() => changeDate(gotoDate(1))} className="button"><img alt="right button" src={RightArrow}/>️</div>
         </Container>
       </div>
     <Container>

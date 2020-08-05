@@ -4,13 +4,15 @@
 
     .nav{
       display: flex;
-      align-items: baseline;
+      align-items: center;
       justify-content: space-between;
 
       .button {
-        padding: 10px;
-        font-size: 3rem;
         cursor: pointer;
+        img {
+          margin: 20px;
+          width: 60px;
+        }
       }
 
       h2 {
